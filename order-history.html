@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Order History - Pia's Lutong Bahay POS</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header>
+        <h1>Pia's Lutong Bahay - Order History</h1>
+        <div class="header-content">
+            <div class="user-info">
+                Welcome, <span id="username"></span>
+                <button class="logout-btn" onclick="logout()">Logout</button>
+            </div>
+            <button class="view-history-btn" onclick="window.location.href='main.html'">Back to POS</button>
+        </div>
+    </header>
+    <main>
+        <table id="orderTable">
+            <thead>
+                <tr>
+                    <th>Date</th>
+                    <th>Total Sales</th>
+                    <th>Number of Orders</th>
+                </tr>
+            </thead>
+            <tbody id="orderTableBody">
+            </tbody>
+        </table>
+    </main>
+    <script>
+        // Add JavaScript for order history functionality here
+    </script>
+</body>
+</html>
