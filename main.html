@@ -420,8 +420,7 @@
             document.getElementById('change-amount').textContent = '0.00';
         }
 
-        function handleEvent(event) {
-            event.preventDefault();
+        function handleInteraction(event) {
             const target = event.target;
             
             if (target.closest('.menu-item')) {
@@ -445,10 +444,23 @@
         }
 
         document.addEventListener('DOMContentLoaded', function() {
-            document.body.addEventListener('click', handleEvent);
-            document.body.addEventListener('touchstart', function(e) {
-                handleEvent(e);
-            }, { passive: false });
+            document.body.addEventListener('click', handleInteraction);
+            document.body.addEventListener('touchend', function(e) {
+                e.preventDefault();
+                handleInteraction(e);
+            });
+
+            const menuItems = document.querySelectorAll('.menu-item');
+            menuItems.forEach(item => {
+                item.addEventListener('touchstart', function(e) {
+                    e.preventDefault();
+                    this.style.transform = 'scale(0.95)';
+                });
+                item.addEventListener('touchend', function(e) {
+                    e.preventDefault();
+                    this.style.transform = 'scale(1)';
+                });
+            });
         });
 
         const currentUser = JSON.parse(localStorage.getItem('currentUser'));
