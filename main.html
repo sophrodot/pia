@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <title>Pia's Lutong Bahay POS</title>
     <link rel="stylesheet" href="styles.css">
     <style>
@@ -292,7 +292,6 @@
         </section>
     </main>
     
-    <!-- Add this popup div at the end of the body -->
     <div id="orderPopup" class="popup">
         <div class="popup-content">
             <h2>Order Details</h2>
@@ -383,7 +382,6 @@
             popupContent.innerHTML = content;
             popup.style.display = 'block';
 
-            // Store the current order in a data attribute
             popup.dataset.currentOrder = JSON.stringify(order);
         }
 
@@ -391,21 +389,18 @@
             const popup = document.getElementById('orderPopup');
             const order = JSON.parse(popup.dataset.currentOrder);
 
-            // Save the order to localStorage
             let orders = JSON.parse(localStorage.getItem('orders')) || [];
             orders.push(order);
             localStorage.setItem('orders', JSON.stringify(orders));
 
             popup.style.display = 'none';
             
-            // Reset the order after closing the popup
             orderItems = [];
             total = 0;
             updateOrderSummary();
             document.getElementById('payment-amount').value = '';
             document.getElementById('change-amount').textContent = '0.00';
 
-            // Clear the stored order
             delete popup.dataset.currentOrder;
         }
 
@@ -425,70 +420,38 @@
             document.getElementById('change-amount').textContent = '0.00';
         }
 
-        function handleMenuItemInteraction(event) {
-            event.preventDefault(); // Prevent default touch behavior
-            const menuItem = event.currentTarget;
-            const item = menuItem.dataset.item;
-            const price = parseFloat(menuItem.dataset.price);
-            addToOrder(item, price);
+        function handleEvent(event) {
+            event.preventDefault();
+            const target = event.currentTarget;
+            
+            if (target.classList.contains('menu-item')) {
+                const item = target.dataset.item;
+                const price = parseFloat(target.dataset.price);
+                addToOrder(item, price);
+            } else if (target.classList.contains('remove-item-btn')) {
+                const index = parseInt(target.dataset.index);
+                removeFromOrder(index);
+            } else if (target.classList.contains('quick-payment-btn')) {
+                const amount = parseFloat(target.dataset.amount);
+                addQuickPayment(amount);
+            } else if (target.classList.contains('calculate-change-btn')) {
+                calculateChange();
+            } else if (target.classList.contains('place-order-btn')) {
+                placeOrder();
+            } else if (target.classList.contains('clear-payment-btn')) {
+                clearPayment();
+            }
         }
 
         document.addEventListener('DOMContentLoaded', function() {
-            const menuItems = document.querySelectorAll('.menu-item');
-            menuItems.forEach(item => {
-                // Remove click event and use touchstart for both touch and click
-                item.addEventListener('touchstart', handleMenuItemInteraction, {passive: false});
-                // Add mouse events for non-touch devices
-                item.addEventListener('mousedown', handleMenuItemInteraction);
+            const interactiveElements = document.querySelectorAll('.menu-item, .remove-item-btn, .quick-payment-btn, .calculate-change-btn, .place-order-btn, .clear-payment-btn');
+            
+            interactiveElements.forEach(element => {
+                element.addEventListener('touchstart', handleEvent, {passive: false});
+                element.addEventListener('click', handleEvent);
             });
-
-            const orderList = document.getElementById('order-list');
-            orderList.addEventListener('touchstart', function(event) {
-                if (event.target.classList.contains('remove-item-btn')) {
-                    event.preventDefault();
-                    const index = parseInt(event.target.dataset.index);
-                    removeFromOrder(index);
-                }
-            }, {passive: false});
-
-            // Keep mouse event for non-touch devices
-            orderList.addEventListener('click', function(event) {
-                if (event.target.classList.contains('remove-item-btn')) {
-                    const index = parseInt(event.target.dataset.index);
-                    removeFromOrder(index);
-                }
-            });
-
-            const quickPaymentButtons = document.querySelectorAll('.quick-payment-btn');
-            quickPaymentButtons.forEach(button => {
-                button.addEventListener('touchstart', function(event) {
-                    event.preventDefault();
-                    const amount = parseFloat(this.dataset.amount);
-                    addQuickPayment(amount);
-                }, {passive: false});
-                // Keep click event for non-touch devices
-                button.addEventListener('click', function() {
-                    const amount = parseFloat(this.dataset.amount);
-                    addQuickPayment(amount);
-                });
-            });
-
-            const calculateChangeBtn = document.querySelector('.calculate-change-btn');
-            calculateChangeBtn.addEventListener('touchstart', function(event) {
-                event.preventDefault();
-                calculateChange();
-            }, {passive: false});
-            calculateChangeBtn.addEventListener('click', calculateChange);
-
-            const placeOrderBtn = document.querySelector('.place-order-btn');
-            placeOrderBtn.addEventListener('touchstart', function(event) {
-                event.preventDefault();
-                placeOrder();
-            }, {passive: false});
-            placeOrderBtn.addEventListener('click', placeOrder);
         });
 
-        // Set username
         const currentUser = JSON.parse(localStorage.getItem('currentUser'));
         document.getElementById('username').textContent = currentUser ? currentUser.username : 'Guest';
     </script>
