@@ -9,9 +9,173 @@
         .menu-item {
             cursor: pointer;
             transition: transform 0.1s ease-in-out;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 1rem;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            background-color: white;
         }
         .menu-item:active {
             transform: scale(0.98);
+        }
+        .menu-item img {
+            width: 100%;
+            height: 150px;
+            object-fit: cover;
+            border-radius: 4px;
+            margin-bottom: 10px;
+        }
+        .menu-item h3 {
+            margin: 0.5rem 0;
+            font-size: 1.1em;
+        }
+        .menu-item p {
+            margin: 0;
+            font-weight: bold;
+            color: #4CAF50;
+        }
+
+        @media (max-width: 1024px) {
+            .quick-payment-btn,
+            .calculate-change-btn,
+            .place-order-btn,
+            .clear-payment-btn {
+                font-size: 1.2em;
+                padding: 12px 20px;
+            }
+
+            .payment-input {
+                font-size: 1.2em;
+                padding: 12px;
+            }
+
+            .order-summary h2 {
+                font-size: 1.8em;
+            }
+
+            .total {
+                font-size: 1.5em;
+            }
+
+            .change-display {
+                font-size: 1.3em;
+            }
+
+            .order-summary li {
+                font-size: 1.1em;
+                padding: 10px;
+            }
+
+            .remove-item-btn {
+                font-size: 1em;
+                padding: 8px 12px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .quick-payment-btn,
+            .calculate-change-btn,
+            .place-order-btn,
+            .clear-payment-btn {
+                font-size: 1.4em;
+                padding: 15px 25px;
+            }
+
+            .payment-input {
+                font-size: 1.4em;
+                padding: 15px;
+            }
+
+            .order-summary h2 {
+                font-size: 2em;
+            }
+
+            .total {
+                font-size: 1.7em;
+            }
+
+            .change-display {
+                font-size: 1.5em;
+            }
+
+            .order-summary li {
+                font-size: 1.2em;
+                padding: 12px;
+            }
+
+            .remove-item-btn {
+                font-size: 1.1em;
+                padding: 10px 15px;
+            }
+        }
+
+        .quick-payment-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            margin-bottom: 1rem;
+        }
+        .quick-payment-btn {
+            flex: 1 0 21%; /* This will create a 4-column layout */
+            margin: 0.25rem;
+            padding: 0.5rem;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+            border-radius: 4px;
+            font-size: 0.9em;
+            transition: background-color 0.3s;
+        }
+        .quick-payment-btn:hover {
+            background-color: #45a049;
+        }
+
+        .popup {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+        }
+        .popup-content {
+            background-color: white;
+            margin: 10% auto;
+            padding: 20px;
+            border-radius: 5px;
+            width: 80%;
+            max-width: 500px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        .popup h2 {
+            margin-top: 0;
+        }
+        .popup ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        .popup li {
+            margin-bottom: 5px;
+        }
+        .popup-close {
+            display: block;
+            width: 100%;
+            padding: 10px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            font-size: 16px;
+            cursor: pointer;
+            margin-top: 20px;
+        }
+        .popup-close:hover {
+            background-color: #45a049;
         }
     </style>
 </head>
@@ -38,42 +202,37 @@
                 <div class="menu-item" data-item="Adobo" data-price="150.00">
                     <img src="https://upload.wikimedia.org/wikipedia/commons/c/c9/Adobo_DSCF4391.jpg" alt="Adobo">
                     <h3>Adobo</h3>
-                    <p>Price: ₱150.00</p>
+                    <p>₱150.00</p>
                 </div>
                 <div class="menu-item" data-item="Sinigang" data-price="180.00">
                     <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/f/f5/Sinigang_na_Baboy_DSCF4234.jpg/1200px-Sinigang_na_Baboy_DSCF4234.jpg" alt="Sinigang">
                     <h3>Sinigang</h3>
-                    <p>Price: ₱180.00</p>
+                    <p>₱180.00</p>
                 </div>
                 <div class="menu-item" data-item="Pancit" data-price="120.00">
                     <img src="https://upload.wikimedia.org/wikipedia/commons/c/ce/Orient_Valley_Filipino_Cuisine_-_5.jpg" alt="Pancit">
-                    <h3>Menudo</h3>
-                    <p>Price: ₱120.00</p>
+                    <h3>Pancit</h3>
+                    <p>₱120.00</p>
                 </div>
                 <div class="menu-item" data-item="Kare-Kare" data-price="200.00">
                     <img src="https://upload.wikimedia.org/wikipedia/commons/a/ac/Mac_MG_5939.jpg" alt="Kare-Kare">
                     <h3>Kare-Kare</h3>
-                    <p>Price: ₱200.00</p>
+                    <p>₱200.00</p>
                 </div>
                 <div class="menu-item" data-item="Laing" data-price="180.00">
-                    <img src="https://upload.wikimedia.org/wikipedia/commons/5/59/Laing%2C_Bicolano_dish.jpg" alt="Lechon Kawali">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/5/59/Laing%2C_Bicolano_dish.jpg" alt="Laing">
                     <h3>Laing</h3>
-                    <p>Price: ₱180.00</p>
+                    <p>₱180.00</p>
                 </div>
                 <div class="menu-item" data-item="Bicol Express" data-price="100.00">
-                    <img src="https://upload.wikimedia.org/wikipedia/commons/e/e8/Bicol_Express.jpg" alt="Halo-Halo">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/e/e8/Bicol_Express.jpg" alt="Bicol Express">
                     <h3>Bicol Express</h3>
-                    <p>Price: ₱100.00</p>
-                </div>
-                <div class="menu-item" data-item="Fried Food" data-price="120.00">
-                    <img src="https://example.com/images/fried-food.jpg" alt="Fried Food">
-                    <h3>Fried Food</h3>
-                    <p>Price: ₱120.00</p>
+                    <p>₱100.00</p>
                 </div>
                 <div class="menu-item" data-item="Rice" data-price="12.00">
                     <img src="https://www.shutterstock.com/image-photo/steamed-rice-cooked-spoon-wooden-600nw-1766408459.jpg" alt="Rice">
                     <h3>Rice</h3>
-                    <p>Price: ₱12.00</p>
+                    <p>₱12.00</p>
                 </div>
             </div>
 
@@ -82,22 +241,22 @@
                 <div class="menu-item" data-item="Tapsilog" data-price="120.00">
                     <img src="https://example.com/images/tapsilog.jpg" alt="Tapsilog">
                     <h3>Tapsilog</h3>
-                    <p>Price: ₱120.00</p>
+                    <p>₱120.00</p>
                 </div>
                 <div class="menu-item" data-item="Longsilog" data-price="110.00">
                     <img src="https://example.com/images/longsilog.jpg" alt="Longsilog">
                     <h3>Longsilog</h3>
-                    <p>Price: ₱110.00</p>
+                    <p>₱110.00</p>
                 </div>
                 <div class="menu-item" data-item="Tocilog" data-price="115.00">
                     <img src="https://example.com/images/tocilog.jpg" alt="Tocilog">
                     <h3>Tocilog</h3>
-                    <p>Price: ₱115.00</p>
+                    <p>₱115.00</p>
                 </div>
                 <div class="menu-item" data-item="Bangsilog" data-price="130.00">
                     <img src="https://example.com/images/bangsilog.jpg" alt="Bangsilog">
                     <h3>Bangsilog</h3>
-                    <p>Price: ₱130.00</p>
+                    <p>₱130.00</p>
                 </div>
             </div>
         </section>
@@ -117,14 +276,28 @@
                         <button class="quick-payment-btn" data-amount="100">₱100</button>
                         <button class="quick-payment-btn" data-amount="500">₱500</button>
                         <button class="quick-payment-btn" data-amount="1000">₱1,000</button>
+                        <button class="quick-payment-btn" data-amount="1">₱1</button>
+                        <button class="quick-payment-btn" data-amount="5">₱5</button>
+                        <button class="quick-payment-btn" data-amount="10">₱10</button>
+                        <button class="quick-payment-btn" data-amount="20">₱20</button>
                     </div>
                     <button class="calculate-change-btn">Calculate Change</button>
                     <p class="change-display">Change: ₱<span id="change-amount">0.00</span></p>
                 </div>
-                <button class="place-order-btn">Place Order</button>
+                <button class="place-order-btn" onclick="placeOrder()">Place Order</button>
             </div>
         </section>
     </main>
+    
+    <!-- Add this popup div at the end of the body -->
+    <div id="orderPopup" class="popup">
+        <div class="popup-content">
+            <h2>Order Details</h2>
+            <div id="popupContent"></div>
+            <button class="popup-close" onclick="closePopup()">OK</button>
+        </div>
+    </div>
+
     <script>
         let orderItems = [];
         let total = 0;
@@ -187,16 +360,50 @@
                 change: paymentAmount - total
             };
 
+            showOrderPopup(order);
+        }
+
+        function showOrderPopup(order) {
+            const popup = document.getElementById('orderPopup');
+            const popupContent = document.getElementById('popupContent');
+            
+            let content = `<p><strong>Date:</strong> ${new Date(order.date).toLocaleString()}</p>`;
+            content += '<h3>Order Items:</h3><ul>';
+            order.items.forEach(item => {
+                content += `<li>${item.item} - ₱${item.price.toFixed(2)}</li>`;
+            });
+            content += '</ul>';
+            content += `<p><strong>Total:</strong> ₱${order.total.toFixed(2)}</p>`;
+            content += `<p><strong>Payment:</strong> ₱${order.payment.toFixed(2)}</p>`;
+            content += `<p><strong>Change:</strong> ₱${order.change.toFixed(2)}</p>`;
+
+            popupContent.innerHTML = content;
+            popup.style.display = 'block';
+
+            // Store the current order in a data attribute
+            popup.dataset.currentOrder = JSON.stringify(order);
+        }
+
+        function closePopup() {
+            const popup = document.getElementById('orderPopup');
+            const order = JSON.parse(popup.dataset.currentOrder);
+
+            // Save the order to localStorage
             let orders = JSON.parse(localStorage.getItem('orders')) || [];
             orders.push(order);
             localStorage.setItem('orders', JSON.stringify(orders));
 
-            alert('Order placed successfully!');
+            popup.style.display = 'none';
+            
+            // Reset the order after closing the popup
             orderItems = [];
             total = 0;
             updateOrderSummary();
             document.getElementById('payment-amount').value = '';
             document.getElementById('change-amount').textContent = '0.00';
+
+            // Clear the stored order
+            delete popup.dataset.currentOrder;
         }
 
         function logout() {
@@ -216,6 +423,7 @@
         }
 
         function handleMenuItemInteraction(event) {
+            event.preventDefault(); // Prevent default touch behavior
             const menuItem = event.currentTarget;
             const item = menuItem.dataset.item;
             const price = parseFloat(menuItem.dataset.price);
@@ -225,11 +433,22 @@
         document.addEventListener('DOMContentLoaded', function() {
             const menuItems = document.querySelectorAll('.menu-item');
             menuItems.forEach(item => {
-                item.addEventListener('click', handleMenuItemInteraction);
-                item.addEventListener('touchstart', handleMenuItemInteraction, {passive: true});
+                // Remove click event and use touchstart for both touch and click
+                item.addEventListener('touchstart', handleMenuItemInteraction, {passive: false});
+                // Add mouse events for non-touch devices
+                item.addEventListener('mousedown', handleMenuItemInteraction);
             });
 
             const orderList = document.getElementById('order-list');
+            orderList.addEventListener('touchstart', function(event) {
+                if (event.target.classList.contains('remove-item-btn')) {
+                    event.preventDefault();
+                    const index = parseInt(event.target.dataset.index);
+                    removeFromOrder(index);
+                }
+            }, {passive: false});
+
+            // Keep mouse event for non-touch devices
             orderList.addEventListener('click', function(event) {
                 if (event.target.classList.contains('remove-item-btn')) {
                     const index = parseInt(event.target.dataset.index);
@@ -239,14 +458,31 @@
 
             const quickPaymentButtons = document.querySelectorAll('.quick-payment-btn');
             quickPaymentButtons.forEach(button => {
+                button.addEventListener('touchstart', function(event) {
+                    event.preventDefault();
+                    const amount = parseFloat(this.dataset.amount);
+                    addQuickPayment(amount);
+                }, {passive: false});
+                // Keep click event for non-touch devices
                 button.addEventListener('click', function() {
                     const amount = parseFloat(this.dataset.amount);
                     addQuickPayment(amount);
                 });
             });
 
-            document.querySelector('.calculate-change-btn').addEventListener('click', calculateChange);
-            document.querySelector('.place-order-btn').addEventListener('click', placeOrder);
+            const calculateChangeBtn = document.querySelector('.calculate-change-btn');
+            calculateChangeBtn.addEventListener('touchstart', function(event) {
+                event.preventDefault();
+                calculateChange();
+            }, {passive: false});
+            calculateChangeBtn.addEventListener('click', calculateChange);
+
+            const placeOrderBtn = document.querySelector('.place-order-btn');
+            placeOrderBtn.addEventListener('touchstart', function(event) {
+                event.preventDefault();
+                placeOrder();
+            }, {passive: false});
+            placeOrderBtn.addEventListener('click', placeOrder);
         });
 
         // Set username
