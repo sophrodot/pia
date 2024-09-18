@@ -1,0 +1,323 @@
+/* Add your CSS styles here */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.5rem 1rem;
+    background-color: #333;
+    color: #fff;
+    height: 60px;
+}
+
+.header-left, .header-center, .header-right {
+    flex: 1;
+    display: flex;
+    align-items: center;
+}
+
+.header-left {
+    justify-content: flex-start;
+}
+
+.header-center {
+    justify-content: center;
+}
+
+.header-right {
+    justify-content: flex-end;
+}
+
+.header-center h1 {
+    margin: 0;
+    font-size: 1.5rem;
+}
+
+.user-info {
+    font-size: 0.9rem;
+}
+
+.logout-btn, .view-history-btn {
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    cursor: pointer;
+    border-radius: 3px;
+    font-size: 0.8rem;
+}
+
+.logout-btn {
+    background-color: #f44336;
+    margin-left: 10px;
+}
+
+.logout-btn:hover {
+    background-color: #d32f2f;
+}
+
+.view-history-btn:hover {
+    background-color: #45a049;
+}
+
+main {
+    display: flex;
+    flex: 1;
+    flex-direction: row;
+    overflow: hidden; /* Prevent scrolling on the main container */
+}
+
+.menu-section {
+    flex: 2;
+    padding: 1rem;
+    overflow-y: auto; /* Make this section scrollable */
+    border-right: 1px solid #ddd;
+    height: calc(100vh - 60px); /* Adjust based on your header height */
+}
+
+.order-section {
+    flex: 1;
+    padding: 1rem;
+    background-color: #f4f4f4;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    height: calc(100vh - 60px); /* Adjust based on your header height */
+    overflow-y: auto; /* Allow scrolling if content overflows */
+}
+
+.menu-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 1rem;
+}
+
+.menu-item {
+    border: 1px solid #ddd;
+    padding: 1rem;
+    text-align: center;
+    background-color: white;
+}
+
+.order-summary {
+    position: sticky;
+    top: 1rem;
+    background-color: white;
+    padding: 1.5rem;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    width: 90%;
+    max-width: 400px;
+    text-align: center;
+}
+
+.order-summary h2 {
+    margin-bottom: 1.5rem;
+    color: #333;
+    font-size: 1.5em;
+}
+
+.order-summary ul {
+    list-style-type: none;
+    padding: 0;
+    text-align: left;
+    margin-bottom: 1.5rem;
+}
+
+.order-summary li {
+    margin-bottom: 0.75rem;
+    padding: 0.5rem;
+    background-color: #f9f9f9;
+    border-radius: 4px;
+}
+
+.total {
+    font-size: 1.2em;
+    font-weight: bold;
+    margin-bottom: 1.5rem;
+    padding: 0.5rem;
+    background-color: #e9e9e9;
+    border-radius: 4px;
+}
+
+.payment-section {
+    margin-top: 1.5rem;
+    text-align: center;
+}
+
+.payment-input-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 1rem;
+}
+
+.payment-input {
+    width: 70%;
+    padding: 0.5rem;
+    text-align: center;
+    font-size: 1em;
+    border: 1px solid #ccc;
+    border-radius: 4px 0 0 4px;
+}
+
+.clear-payment-btn {
+    width: 30%;
+    padding: 0.5rem;
+    background-color: #f44336;
+    color: white;
+    border: none;
+    cursor: pointer;
+    border-radius: 0 4px 4px 0;
+    font-size: 1em;
+    transition: background-color 0.3s;
+}
+
+.clear-payment-btn:hover {
+    background-color: #d32f2f;
+}
+
+.quick-payment-buttons {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 1rem;
+}
+
+.quick-payment-btn {
+    flex: 1;
+    margin: 0 0.25rem;
+    padding: 0.5rem;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    cursor: pointer;
+    border-radius: 4px;
+    font-size: 0.9em;
+    transition: background-color 0.3s;
+}
+
+.quick-payment-btn:hover {
+    background-color: #45a049;
+}
+
+.calculate-change-btn {
+    width: 100%;
+    padding: 0.75rem;
+    background-color: #2196F3;
+    color: white;
+    border: none;
+    cursor: pointer;
+    border-radius: 4px;
+    font-size: 1em;
+    margin-bottom: 1rem;
+    transition: background-color 0.3s;
+}
+
+.calculate-change-btn:hover {
+    background-color: #1976D2;
+}
+
+.change-display {
+    font-size: 1.1em;
+    font-weight: bold;
+    margin-bottom: 1.5rem;
+}
+
+.place-order-btn {
+    width: 100%;
+    padding: 0.75rem;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    cursor: pointer;
+    border-radius: 4px;
+    font-size: 1.1em;
+    transition: background-color 0.3s;
+}
+
+.place-order-btn:hover {
+    background-color: #45a049;
+}
+
+@media (max-width: 768px) {
+    main {
+        flex-direction: column;
+        overflow-y: auto; /* Allow scrolling on mobile */
+    }
+    .menu-section, .order-section {
+        flex: none;
+        width: 100%;
+        height: auto; /* Remove fixed height on mobile */
+    }
+    .order-section {
+        border-top: 1px solid #ddd;
+        border-left: none;
+    }
+    .menu-grid {
+        grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    }
+    header {
+        flex-direction: column;
+        height: auto;
+        padding: 0.5rem;
+    }
+    .header-left, .header-center, .header-right {
+        width: 100%;
+        justify-content: center;
+        margin: 0.25rem 0;
+    }
+    .header-center h1 {
+        font-size: 1.2rem;
+    }
+    .order-summary {
+        position: static; /* Remove sticky positioning on mobile */
+    }
+}
+
+/* Add this to your existing styles.css file */
+.menu-section h2 {
+    margin-top: 2rem;
+    margin-bottom: 1rem;
+    color: #333;
+    font-size: 1.5em;
+}
+
+.menu-section h2:first-child {
+    margin-top: 0;
+}
+
+.view-inventory-btn {
+    background-color: #008CBA;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    cursor: pointer;
+    border-radius: 3px;
+    font-size: 0.8rem;
+    margin-left: 10px;
+}
+
+.view-inventory-btn:hover {
+    background-color: #007B9A;
+}
+
+@media (max-width: 768px) {
+    .header-right {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .view-history-btn, .view-inventory-btn {
+        margin: 5px 0;
+        width: 100%;
+    }
+}

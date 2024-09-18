@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Welcome to Pia's Lutong Bahay POS</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="welcome-container">
+        <h1>Welcome to Pia's Lutong Bahay POS</h1>
+        <p>Please login to access the Point of Sale system or create a new account.</p>
+        <div class="button-container">
+            <a href="login.html" class="btn btn-login">Login / Register</a>
+        </div>
+    </div>
+    <script>
+        function checkAuth() {
+            const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+            if (currentUser) {
+                window.location.href = 'main.html';
+            }
+        }
+        checkAuth();
+    </script>
+</body>
+</html>

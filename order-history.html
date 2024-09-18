@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Order History - Pia's Lutong Bahay POS</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        .order-history-container {
+            display: flex;
+            flex-direction: column;
+            padding: 1rem;
+            max-width: 1200px;
+            margin: 0 auto;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        .order-history-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1rem;
+        }
+        .order-history-table th, .order-history-table td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: left;
+        }
+        .order-history-table th {
+            background-color: #f2f2f2;
+            font-weight: bold;
+        }
+        .order-history-table tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+        .clickable-date {
+            cursor: pointer;
+            color: #0066cc;
+            text-decoration: underline;
+        }
+        .order-details {
+            display: none;
+            background-color: #f0f0f0;
+            padding: 15px;
+            border: 1px solid #ddd;
+            margin-top: 10px;
+            border-radius: 4px;
+        }
+        .btn {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 8px 12px;
+            cursor: pointer;
+            border-radius: 4px;
+            font-size: 0.9em;
+            transition: background-color 0.3s;
+        }
+        .btn:hover {
+            background-color: #45a049;
+        }
+        .btn-remove {
+            background-color: #f44336;
+        }
+        .btn-remove:hover {
+            background-color: #d32f2f;
+        }
+        .order-item {
+            background-color: white;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            padding: 10px;
+            margin-bottom: 10px;
+        }
+        .order-item h5 {
+            margin-top: 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .btn-export {
+            background-color: #007bff;
+        }
+        .btn-export:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="header-left">
+            <div class="user-info">
+                Welcome, <span id="username"></span>
+                <button class="logout-btn" onclick="logout()">Logout</button>
+            </div>
+        </div>
+        <div class="header-center">
+            <h1>Pia's Lutong Bahay</h1>
+        </div>
+        <div class="header-right">
+            <button class="btn" onclick="window.location.href='main.html'">Back to POS</button>
+        </div>
+    </header>
+    <main>
+        <div class="order-history-container">
+            <h2>Order History</h2>
+            <table class="order-history-table">
+                <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>Total Sales</th>
+                        <th>Number of Orders</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="orderTableBody">
+                </tbody>
+            </table>
+        </div>
+    </main>
+    <footer>
+        <p>&copy; 2024 Mark Canedo. All rights reserved.</p>
+    </footer>
+
+    <script>
+        function formatDate(dateString) {
+            const options = { day: 'numeric', month: 'long', year: 'numeric' };
+            return new Date(dateString).toLocaleDateString('en-US', options);
+        }
+
+        function formatTime(dateString) {
+            const options = { hour: '2-digit', minute: '2-digit' };
+            return new Date(dateString).toLocaleTimeString('en-US', options);
+        }
+
+        function displayOrderHistory() {
+            const orders = JSON.parse(localStorage.getItem('orders')) || [];
+            const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+            const userOrders = orders.filter(order => order.user === currentUser.username);
+            const tableBody = document.getElementById('orderTableBody');
+            tableBody.innerHTML = '';
+
+            // Group orders by date
+            const groupedOrders = userOrders.reduce((acc, order) => {
+                const date = formatDate(order.date);
+                if (!acc[date]) {
+                    acc[date] = {
+                        totalSales: 0,
+                        orders: []
+                    };
+                }
+                acc[date].totalSales += order.total;
+                acc[date].orders.push(order);
+                return acc;
+            }, {});
+
+            Object.entries(groupedOrders).forEach(([date, data], index) => {
+                const row = tableBody.insertRow();
+                const dateCell = row.insertCell(0);
+                const totalCell = row.insertCell(1);
+                const orderCountCell = row.insertCell(2);
+                const actionsCell = row.insertCell(3);
+
+                dateCell.innerHTML = `<span class="clickable-date" onclick="toggleOrderDetails(${index})">${date}</span>`;
+                totalCell.textContent = `₱${data.totalSales.toFixed(2)}`;
+                orderCountCell.textContent = data.orders.length;
+                actionsCell.innerHTML = `
+                    <button class="btn" onclick="toggleOrderDetails(${index})">View Details</button>
+                    <button class="btn btn-remove" onclick="removeOrderDate('${date}')">Remove</button>
+                    <button class="btn btn-export" onclick="exportOrders('${date}')">Export</button>
+                `;
+
+                const detailsRow = tableBody.insertRow();
+                detailsRow.innerHTML = `
+                    <td colspan="4" class="order-details" id="details-${index}">
+                        <h4>Orders for ${date}:</h4>
+                        ${data.orders.map((order, orderIndex) => `
+                            <div class="order-item">
+                                <h5>
+                                    Order #${orderIndex + 1} - ${formatTime(order.date)}
+                                    <button class="btn btn-remove" onclick="removeIndividualOrder('${date}', ${orderIndex})">Remove</button>
+                                </h5>
+                                <ul>
+                                    ${order.items.map(item => `<li>${item.item} - ₱${item.price.toFixed(2)}</li>`).join('')}
+                                </ul>
+                                <p>Total: ₱${order.total.toFixed(2)} | Payment: ₱${order.payment.toFixed(2)} | Change: ₱${order.change.toFixed(2)}</p>
+                            </div>
+                        `).join('')}
+                    </td>
+                `;
+            });
+        }
+
+        function toggleOrderDetails(index) {
+            const detailsElement = document.getElementById(`details-${index}`);
+            detailsElement.style.display = detailsElement.style.display === 'none' ? 'table-cell' : 'none';
+        }
+
+        function logout() {
+            localStorage.removeItem('currentUser');
+            window.location.href = 'login.html';
+        }
+
+        function removeOrderDate(date) {
+            if (confirm(`Are you sure you want to remove all orders from ${date}?`)) {
+                let orders = JSON.parse(localStorage.getItem('orders')) || [];
+                orders = orders.filter(order => formatDate(order.date) !== date);
+                localStorage.setItem('orders', JSON.stringify(orders));
+                displayOrderHistory();
+            }
+        }
+
+        function removeIndividualOrder(date, orderIndex) {
+            if (confirm(`Are you sure you want to remove Order #${orderIndex + 1} from ${date}?`)) {
+                let orders = JSON.parse(localStorage.getItem('orders')) || [];
+                const formattedDate = formatDate(orders[0].date);
+                orders = orders.filter((order, index) => 
+                    formatDate(order.date) !== date || 
+                    (formatDate(order.date) === date && index !== orderIndex)
+                );
+                localStorage.setItem('orders', JSON.stringify(orders));
+                displayOrderHistory();
+            }
+        }
+
+        function exportOrders(date) {
+            const orders = JSON.parse(localStorage.getItem('orders')) || [];
+            const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+            const userOrders = orders.filter(order => order.user === currentUser.username && formatDate(order.date) === date);
+            
+            let exportContent = `Orders for ${date}\n\n`;
+            
+            userOrders.forEach((order, index) => {
+                exportContent += `Order #${index + 1} - ${formatTime(order.date)}\n`;
+                order.items.forEach(item => {
+                    exportContent += `${item.item} - ₱${item.price.toFixed(2)}\n`;
+                });
+                exportContent += `Total: ₱${order.total.toFixed(2)}\n`;
+                exportContent += `Payment: ₱${order.payment.toFixed(2)}\n`;
+                exportContent += `Change: ₱${order.change.toFixed(2)}\n\n`;
+            });
+            
+            exportContent += `Total Sales for ${date}: ₱${userOrders.reduce((sum, order) => sum + order.total, 0).toFixed(2)}`;
+            
+            const blob = new Blob([exportContent], { type: 'text/plain' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `orders_${date.replace(/\s/g, '_')}.txt`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        }
+
+        // Set username
+        const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+        document.getElementById('username').textContent = currentUser ? currentUser.username : 'Guest';
+
+        // Display order history when the page loads
+        displayOrderHistory();
+    </script>
+</body>
+</html>
