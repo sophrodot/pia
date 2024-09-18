@@ -32,8 +32,8 @@
     <header>
         <h1>Pia's Lutong Bahay POS</h1>
         <p>Welcome, <span id="username"></span></p>
-        <button onclick="logout()">Logout</button>
-        <button onclick="window.location.href='order-history.html'">View Order History</button>
+        <button id="logoutBtn">Logout</button>
+        <button id="orderHistoryBtn">View Order History</button>
     </header>
     
     <main>
@@ -53,9 +53,9 @@
                 <button class="quick-payment-btn" data-amount="500">₱500</button>
                 <button class="quick-payment-btn" data-amount="1000">₱1000</button>
             </div>
-            <button onclick="calculateChange()">Calculate Change</button>
+            <button id="calculateChangeBtn">Calculate Change</button>
             <p>Change: ₱<span id="change">0.00</span></p>
-            <button onclick="placeOrder()">Place Order</button>
+            <button id="placeOrderBtn">Place Order</button>
         </section>
     </main>
 
@@ -82,7 +82,7 @@
                     <h3>${item.name}</h3>
                     <p>₱${item.price.toFixed(2)}</p>
                 `;
-                div.onclick = () => addToOrder(item);
+                div.addEventListener('touchstart', () => addToOrder(item));
                 menuContainer.appendChild(div);
             });
         }
@@ -101,7 +101,10 @@
                 li.textContent = `${item.name} - ₱${item.price.toFixed(2)}`;
                 const removeBtn = document.createElement('button');
                 removeBtn.textContent = 'Remove';
-                removeBtn.onclick = () => removeFromOrder(index);
+                removeBtn.addEventListener('touchstart', (e) => {
+                    e.preventDefault();
+                    removeFromOrder(index);
+                });
                 li.appendChild(removeBtn);
                 orderList.appendChild(li);
             });
@@ -143,15 +146,26 @@
             window.location.href = 'login.html';
         }
 
-        document.addEventListener('DOMContentLoaded', function() {
-            displayMenu();
+        function addEventListeners() {
+            document.getElementById('logoutBtn').addEventListener('touchstart', logout);
+            document.getElementById('orderHistoryBtn').addEventListener('touchstart', () => {
+                window.location.href = 'order-history.html';
+            });
+            document.getElementById('calculateChangeBtn').addEventListener('touchstart', calculateChange);
+            document.getElementById('placeOrderBtn').addEventListener('touchstart', placeOrder);
+
             document.querySelectorAll('.quick-payment-btn').forEach(btn => {
-                btn.addEventListener('click', function() {
+                btn.addEventListener('touchstart', function() {
                     const amount = parseFloat(this.dataset.amount);
                     const paymentInput = document.getElementById('payment-amount');
                     paymentInput.value = (parseFloat(paymentInput.value) || 0) + amount;
                 });
             });
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            displayMenu();
+            addEventListeners();
         });
 
         const currentUser = JSON.parse(localStorage.getItem('currentUser'));
