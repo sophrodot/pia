@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <title>Pia's Lutong Bahay POS</title>
     <link rel="stylesheet" href="styles.css">
     <style>
@@ -445,26 +445,34 @@
         }
 
         document.addEventListener('DOMContentLoaded', function() {
-            // Use both click and touchstart events
-            ['click', 'touchstart'].forEach(function(eventType) {
-                document.body.addEventListener(eventType, handleInteraction, { passive: false });
+            // Use FastClick to eliminate the 300ms delay on clickable elements
+            FastClick.attach(document.body);
+
+            // Add click event listener to the body
+            document.body.addEventListener('click', handleInteraction);
+
+            // Add touchend event listener with a delay
+            document.body.addEventListener('touchend', function(e) {
+                e.preventDefault(); // Prevent any default behavior
+                setTimeout(function() {
+                    handleInteraction(e);
+                }, 100); // Small delay to ensure the click event doesn't also fire
             });
 
             const menuItems = document.querySelectorAll('.menu-item');
             menuItems.forEach(item => {
                 item.addEventListener('touchstart', function(e) {
-                    e.preventDefault();
                     this.style.transform = 'scale(0.95)';
-                }, { passive: false });
+                }, { passive: true });
                 item.addEventListener('touchend', function(e) {
-                    e.preventDefault();
                     this.style.transform = 'scale(1)';
-                }, { passive: false });
+                }, { passive: true });
             });
         });
 
         const currentUser = JSON.parse(localStorage.getItem('currentUser'));
         document.getElementById('username').textContent = currentUser ? currentUser.username : 'Guest';
     </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fastclick/1.0.6/fastclick.min.js"></script>
 </body>
 </html>
