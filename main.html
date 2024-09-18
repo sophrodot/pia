@@ -422,59 +422,42 @@
             document.getElementById('change-amount').textContent = '0.00';
         }
 
-        function handleInteraction(event) {
-            event.preventDefault(); // Prevent default behavior
-            const target = event.target;
-            
-            if (target.closest('.menu-item')) {
-                const menuItem = target.closest('.menu-item');
-                const item = menuItem.dataset.item;
-                const price = parseFloat(menuItem.dataset.price);
-                addToOrder(item, price);
-            } else if (target.classList.contains('remove-item-btn')) {
-                const index = parseInt(target.dataset.index);
-                removeFromOrder(index);
-            } else if (target.classList.contains('quick-payment-btn')) {
-                const amount = parseFloat(target.dataset.amount);
-                addQuickPayment(amount);
-            } else if (target.classList.contains('calculate-change-btn')) {
-                calculateChange();
-            } else if (target.classList.contains('place-order-btn')) {
-                placeOrder();
-            } else if (target.classList.contains('clear-payment-btn')) {
-                clearPayment();
-            }
-        }
-
         document.addEventListener('DOMContentLoaded', function() {
-            // Use FastClick to eliminate the 300ms delay on clickable elements
-            FastClick.attach(document.body);
-
-            // Add click event listener to the body
-            document.body.addEventListener('click', handleInteraction);
-
-            // Add touchend event listener with a delay
-            document.body.addEventListener('touchend', function(e) {
-                e.preventDefault(); // Prevent any default behavior
-                setTimeout(function() {
-                    handleInteraction(e);
-                }, 100); // Small delay to ensure the click event doesn't also fire
-            });
-
+            // Menu items
             const menuItems = document.querySelectorAll('.menu-item');
             menuItems.forEach(item => {
-                item.addEventListener('touchstart', function(e) {
-                    this.style.transform = 'scale(0.95)';
-                }, { passive: true });
-                item.addEventListener('touchend', function(e) {
-                    this.style.transform = 'scale(1)';
-                }, { passive: true });
+                item.addEventListener('click', function() {
+                    const itemName = this.dataset.item;
+                    const itemPrice = parseFloat(this.dataset.price);
+                    addToOrder(itemName, itemPrice);
+                });
             });
+
+            // Remove buttons
+            document.getElementById('order-list').addEventListener('click', function(e) {
+                if (e.target.classList.contains('remove-item-btn')) {
+                    const index = parseInt(e.target.dataset.index);
+                    removeFromOrder(index);
+                }
+            });
+
+            // Quick payment buttons
+            const quickPaymentButtons = document.querySelectorAll('.quick-payment-btn');
+            quickPaymentButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    const amount = parseFloat(this.dataset.amount);
+                    addQuickPayment(amount);
+                });
+            });
+
+            // Other buttons
+            document.querySelector('.calculate-change-btn').addEventListener('click', calculateChange);
+            document.querySelector('.place-order-btn').addEventListener('click', placeOrder);
+            document.querySelector('.clear-payment-btn').addEventListener('click', clearPayment);
         });
 
         const currentUser = JSON.parse(localStorage.getItem('currentUser'));
         document.getElementById('username').textContent = currentUser ? currentUser.username : 'Guest';
     </script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/fastclick/1.0.6/fastclick.min.js"></script>
 </body>
 </html>
