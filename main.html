@@ -2,319 +2,94 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Pia's Lutong Bahay POS</title>
     <link rel="stylesheet" href="styles.css">
     <style>
         .menu-item {
-            cursor: pointer;
-            transition: transform 0.1s ease-in-out;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            padding: 1rem;
             border: 1px solid #ddd;
-            border-radius: 8px;
-            background-color: white;
-            width: 100%;
+            padding: 10px;
+            margin: 10px;
             text-align: center;
-        }
-        .menu-item:active {
-            transform: scale(0.98);
+            cursor: pointer;
         }
         .menu-item img {
-            width: 100%;
+            max-width: 100%;
             height: 150px;
             object-fit: cover;
-            border-radius: 4px;
-            margin-bottom: 10px;
         }
-        .menu-item h3 {
-            margin: 0.5rem 0;
-            font-size: 1.1em;
-        }
-        .menu-item p {
-            margin: 0;
-            font-weight: bold;
-            color: #4CAF50;
-        }
-
-        @media (max-width: 1024px) {
-            .quick-payment-btn,
-            .calculate-change-btn,
-            .place-order-btn,
-            .clear-payment-btn {
-                font-size: 1.2em;
-                padding: 12px 20px;
-            }
-
-            .payment-input {
-                font-size: 1.2em;
-                padding: 12px;
-            }
-
-            .order-summary h2 {
-                font-size: 1.8em;
-            }
-
-            .total {
-                font-size: 1.5em;
-            }
-
-            .change-display {
-                font-size: 1.3em;
-            }
-
-            .order-summary li {
-                font-size: 1.1em;
-                padding: 10px;
-            }
-
-            .remove-item-btn {
-                font-size: 1em;
-                padding: 8px 12px;
-            }
-        }
-
-        @media (max-width: 768px) {
-            .quick-payment-btn,
-            .calculate-change-btn,
-            .place-order-btn,
-            .clear-payment-btn {
-                font-size: 1.4em;
-                padding: 15px 25px;
-            }
-
-            .payment-input {
-                font-size: 1.4em;
-                padding: 15px;
-            }
-
-            .order-summary h2 {
-                font-size: 2em;
-            }
-
-            .total {
-                font-size: 1.7em;
-            }
-
-            .change-display {
-                font-size: 1.5em;
-            }
-
-            .order-summary li {
-                font-size: 1.2em;
-                padding: 12px;
-            }
-
-            .remove-item-btn {
-                font-size: 1.1em;
-                padding: 10px 15px;
-            }
-        }
-
-        .quick-payment-buttons {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: space-between;
-            margin-bottom: 1rem;
+        .order-summary {
+            border: 1px solid #ddd;
+            padding: 10px;
+            margin: 10px;
         }
         .quick-payment-btn {
-            flex: 1 0 21%; /* This will create a 4-column layout */
-            margin: 0.25rem;
-            padding: 0.5rem;
-            background-color: #4CAF50;
-            color: white;
-            border: none;
-            cursor: pointer;
-            border-radius: 4px;
-            font-size: 0.9em;
-            transition: background-color 0.3s;
+            margin: 5px;
         }
-        .quick-payment-btn:hover {
-            background-color: #45a049;
-        }
-
-        .popup {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.5);
-            z-index: 1000;
-        }
-        .popup-content {
-            background-color: white;
-            margin: 10% auto;
-            padding: 20px;
-            border-radius: 5px;
-            width: 80%;
-            max-width: 500px;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-        }
-        .popup h2 {
-            margin-top: 0;
-        }
-        .popup ul {
-            list-style-type: none;
-            padding: 0;
-        }
-        .popup li {
-            margin-bottom: 5px;
-        }
-        .popup-close {
-            display: block;
-            width: 100%;
-            padding: 10px;
-            background-color: #4CAF50;
-            color: white;
-            border: none;
-            border-radius: 4px;
-            font-size: 16px;
-            cursor: pointer;
-            margin-top: 20px;
-        }
-        .popup-close:hover {
-            background-color: #45a049;
-        }
-        button {
-    touch-action: manipulation;
-}
     </style>
 </head>
 <body>
     <header>
-        <div class="header-left">
-            <div class="user-info">
-                Welcome, <span id="username"></span>
-                <button class="logout-btn" onclick="logout()">Logout</button>
-            </div>
-        </div>
-        <div class="header-center">
-            <h1>Pia's Lutong Bahay</h1>
-        </div>
-        <div class="header-right">
-            <button class="view-history-btn" onclick="window.location.href='order-history.html'">View Order History</button>
-            <button class="view-inventory-btn" onclick="window.location.href='inventory.html'">View Inventory</button>
-        </div>
+        <h1>Pia's Lutong Bahay POS</h1>
+        <p>Welcome, <span id="username"></span></p>
+        <button onclick="logout()">Logout</button>
+        <button onclick="window.location.href='order-history.html'">View Order History</button>
     </header>
+    
     <main>
-        <section class="menu-section">
-            <h2>Menu Items</h2>
-            <div class="menu-grid">
-                <button class="menu-item" data-item="Adobo" data-price="150.00">
-                    <img src="https://upload.wikimedia.org/wikipedia/commons/c/c9/Adobo_DSCF4391.jpg" alt="Adobo">
-                    <h3>Adobo</h3>
-                    <p>₱150.00</p>
-                </button>
-                <button class="menu-item" data-item="Sinigang" data-price="180.00">
-                    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/f/f5/Sinigang_na_Baboy_DSCF4234.jpg/1200px-Sinigang_na_Baboy_DSCF4234.jpg" alt="Sinigang">
-                    <h3>Sinigang</h3>
-                    <p>₱180.00</p>
-                </button>
-                <button class="menu-item" data-item="Pancit" data-price="120.00">
-                    <img src="https://upload.wikimedia.org/wikipedia/commons/c/ce/Orient_Valley_Filipino_Cuisine_-_5.jpg" alt="Pancit">
-                    <h3>Pancit</h3>
-                    <p>₱120.00</p>
-                </button>
-                <button class="menu-item" data-item="Kare-Kare" data-price="200.00">
-                    <img src="https://upload.wikimedia.org/wikipedia/commons/a/ac/Mac_MG_5939.jpg" alt="Kare-Kare">
-                    <h3>Kare-Kare</h3>
-                    <p>₱200.00</p>
-                </button>
-                <button class="menu-item" data-item="Laing" data-price="180.00">
-                    <img src="https://upload.wikimedia.org/wikipedia/commons/5/59/Laing%2C_Bicolano_dish.jpg" alt="Laing">
-                    <h3>Laing</h3>
-                    <p>₱180.00</p>
-                </button>
-                <button class="menu-item" data-item="Bicol Express" data-price="100.00">
-                    <img src="https://upload.wikimedia.org/wikipedia/commons/e/e8/Bicol_Express.jpg" alt="Bicol Express">
-                    <h3>Bicol Express</h3>
-                    <p>₱100.00</p>
-                </button>
-                <button class="menu-item" data-item="Rice" data-price="12.00">
-                    <img src="https://www.shutterstock.com/image-photo/steamed-rice-cooked-spoon-wooden-600nw-1766408459.jpg" alt="Rice">
-                    <h3>Rice</h3>
-                    <p>₱12.00</p>
-                </button>
-            </div>
-
-            <h2>Silog</h2>
-            <div class="menu-grid">
-                <button class="menu-item" data-item="Tapsilog" data-price="120.00">
-                    <img src="https://example.com/images/tapsilog.jpg" alt="Tapsilog">
-                    <h3>Tapsilog</h3>
-                    <p>₱120.00</p>
-                </button>
-                <button class="menu-item" data-item="Longsilog" data-price="110.00">
-                    <img src="https://example.com/images/longsilog.jpg" alt="Longsilog">
-                    <h3>Longsilog</h3>
-                    <p>₱110.00</p>
-                </button>
-                <button class="menu-item" data-item="Tocilog" data-price="115.00">
-                    <img src="https://example.com/images/tocilog.jpg" alt="Tocilog">
-                    <h3>Tocilog</h3>
-                    <p>₱115.00</p>
-                </button>
-                <button class="menu-item" data-item="Bangsilog" data-price="130.00">
-                    <img src="https://example.com/images/bangsilog.jpg" alt="Bangsilog">
-                    <h3>Bangsilog</h3>
-                    <p>₱130.00</p>
-                </button>
-            </div>
+        <section id="menu">
+            <h2>Menu</h2>
+            <div id="menu-items"></div>
         </section>
-        <section class="order-section">
-            <div class="order-summary">
-                <h2>Order Summary</h2>
-                <ul id="order-list"></ul>
-                <p class="total">Total: ₱<span id="total">0.00</span></p>
-                <div class="payment-section">
-                    <label for="payment-amount">Payment Amount:</label>
-                    <div class="payment-input-container">
-                        <input type="number" id="payment-amount" class="payment-input" step="0.01" min="0">
-                        <button class="clear-payment-btn" onclick="clearPayment()">×</button>
-                    </div>
-                    <div class="quick-payment-buttons">
-                        <button class="quick-payment-btn" onclick="addQuickPayment(50)">₱50</button>
-                        <button class="quick-payment-btn" onclick="addQuickPayment(100)">₱100</button>
-                        <button class="quick-payment-btn" onclick="addQuickPayment(500)">₱500</button>
-                        <button class="quick-payment-btn" onclick="addQuickPayment(1000)">₱1,000</button>
-                        <button class="quick-payment-btn" onclick="addQuickPayment(1)">₱1</button>
-                        <button class="quick-payment-btn" onclick="addQuickPayment(5)">₱5</button>
-                        <button class="quick-payment-btn" onclick="addQuickPayment(10)">₱10</button>
-                        <button class="quick-payment-btn" onclick="addQuickPayment(20)">₱20</button>
-                    </div>
-                    <button class="calculate-change-btn">Calculate Change</button>
-                    <p class="change-display">Change: ₱<span id="change-amount">0.00</span></p>
-                </div>
-                <button class="place-order-btn" onclick="placeOrder()">Place Order</button>
+        
+        <section id="order">
+            <h2>Order Summary</h2>
+            <ul id="order-list"></ul>
+            <p>Total: ₱<span id="total">0.00</span></p>
+            <input type="number" id="payment-amount" placeholder="Payment Amount">
+            <div id="quick-payment">
+                <button class="quick-payment-btn" data-amount="50">₱50</button>
+                <button class="quick-payment-btn" data-amount="100">₱100</button>
+                <button class="quick-payment-btn" data-amount="500">₱500</button>
+                <button class="quick-payment-btn" data-amount="1000">₱1000</button>
             </div>
+            <button onclick="calculateChange()">Calculate Change</button>
+            <p>Change: ₱<span id="change">0.00</span></p>
+            <button onclick="placeOrder()">Place Order</button>
         </section>
     </main>
-    
-    <div id="orderPopup" class="popup">
-        <div class="popup-content">
-            <h2>Order Details</h2>
-            <div id="popupContent"></div>
-            <button class="popup-close" onclick="closePopup()">OK</button>
-        </div>
-    </div>
 
     <script>
+        const menuItems = [
+            {name: "Adobo", price: 150},
+            {name: "Sinigang", price: 180},
+            {name: "Pancit", price: 120},
+            {name: "Kare-Kare", price: 200},
+            {name: "Lechon Kawali", price: 180},
+            {name: "Halo-Halo", price: 100},
+            {name: "Rice", price: 12}
+        ];
+
         let orderItems = [];
         let total = 0;
 
-        function addToOrder(item, price) {
-            orderItems.push({ item, price });
-            total += price;
-            updateOrderSummary();
+        function displayMenu() {
+            const menuContainer = document.getElementById('menu-items');
+            menuItems.forEach(item => {
+                const div = document.createElement('div');
+                div.className = 'menu-item';
+                div.innerHTML = `
+                    <h3>${item.name}</h3>
+                    <p>₱${item.price.toFixed(2)}</p>
+                `;
+                div.onclick = () => addToOrder(item);
+                menuContainer.appendChild(div);
+            });
         }
 
-        function removeFromOrder(index) {
-            const removedItem = orderItems.splice(index, 1)[0];
-            total -= removedItem.price;
+        function addToOrder(item) {
+            orderItems.push(item);
+            total += item.price;
             updateOrderSummary();
         }
 
@@ -323,14 +98,20 @@
             orderList.innerHTML = '';
             orderItems.forEach((item, index) => {
                 const li = document.createElement('li');
-                li.className = 'order-item';
-                li.innerHTML = `
-                    <span>${item.item} - ₱${item.price.toFixed(2)}</span>
-                    <button class="remove-item-btn" data-index="${index}">Remove</button>
-                `;
+                li.textContent = `${item.name} - ₱${item.price.toFixed(2)}`;
+                const removeBtn = document.createElement('button');
+                removeBtn.textContent = 'Remove';
+                removeBtn.onclick = () => removeFromOrder(index);
+                li.appendChild(removeBtn);
                 orderList.appendChild(li);
             });
             document.getElementById('total').textContent = total.toFixed(2);
+        }
+
+        function removeFromOrder(index) {
+            total -= orderItems[index].price;
+            orderItems.splice(index, 1);
+            updateOrderSummary();
         }
 
         function calculateChange() {
@@ -340,11 +121,7 @@
                 return;
             }
             const change = paymentAmount - total;
-            if (change < 0) {
-                alert('Insufficient payment amount.');
-                return;
-            }
-            document.getElementById('change-amount').textContent = change.toFixed(2);
+            document.getElementById('change').textContent = change.toFixed(2);
         }
 
         function placeOrder() {
@@ -353,57 +130,12 @@
                 alert('Please enter a valid payment amount.');
                 return;
             }
-
-            const currentUser = JSON.parse(localStorage.getItem('currentUser'));
-            const order = {
-                user: currentUser.username,
-                date: new Date().toISOString(),
-                items: orderItems,
-                total: total,
-                payment: paymentAmount,
-                change: paymentAmount - total
-            };
-
-            showOrderPopup(order);
-        }
-
-        function showOrderPopup(order) {
-            const popup = document.getElementById('orderPopup');
-            const popupContent = document.getElementById('popupContent');
-            
-            let content = `<p><strong>Date:</strong> ${new Date(order.date).toLocaleString()}</p>`;
-            content += '<h3>Order Items:</h3><ul>';
-            order.items.forEach(item => {
-                content += `<li>${item.item} - ₱${item.price.toFixed(2)}</li>`;
-            });
-            content += '</ul>';
-            content += `<p><strong>Total:</strong> ₱${order.total.toFixed(2)}</p>`;
-            content += `<p><strong>Payment:</strong> ₱${order.payment.toFixed(2)}</p>`;
-            content += `<p><strong>Change:</strong> ₱${order.change.toFixed(2)}</p>`;
-
-            popupContent.innerHTML = content;
-            popup.style.display = 'block';
-
-            popup.dataset.currentOrder = JSON.stringify(order);
-        }
-
-        function closePopup() {
-            const popup = document.getElementById('orderPopup');
-            const order = JSON.parse(popup.dataset.currentOrder);
-
-            let orders = JSON.parse(localStorage.getItem('orders')) || [];
-            orders.push(order);
-            localStorage.setItem('orders', JSON.stringify(orders));
-
-            popup.style.display = 'none';
-            
+            alert('Order placed successfully!');
             orderItems = [];
             total = 0;
             updateOrderSummary();
             document.getElementById('payment-amount').value = '';
-            document.getElementById('change-amount').textContent = '0.00';
-
-            delete popup.dataset.currentOrder;
+            document.getElementById('change').textContent = '0.00';
         }
 
         function logout() {
@@ -411,49 +143,15 @@
             window.location.href = 'login.html';
         }
 
-        function addQuickPayment(amount) {
-            const paymentInput = document.getElementById('payment-amount');
-            const currentAmount = parseFloat(paymentInput.value) || 0;
-            paymentInput.value = (currentAmount + amount).toFixed(2);
-        }
-
-        function clearPayment() {
-            document.getElementById('payment-amount').value = '';
-            document.getElementById('change-amount').textContent = '0.00';
-        }
-
         document.addEventListener('DOMContentLoaded', function() {
-            // Menu items
-            const menuItems = document.querySelectorAll('.menu-item');
-            menuItems.forEach(item => {
-                item.addEventListener('click', function() {
-                    const itemName = this.dataset.item;
-                    const itemPrice = parseFloat(this.dataset.price);
-                    addToOrder(itemName, itemPrice);
-                });
-            });
-
-            // Remove buttons
-            document.getElementById('order-list').addEventListener('click', function(e) {
-                if (e.target.classList.contains('remove-item-btn')) {
-                    const index = parseInt(e.target.dataset.index);
-                    removeFromOrder(index);
-                }
-            });
-
-            // Quick payment buttons
-            const quickPaymentButtons = document.querySelectorAll('.quick-payment-btn');
-            quickPaymentButtons.forEach(button => {
-                button.addEventListener('click', function() {
+            displayMenu();
+            document.querySelectorAll('.quick-payment-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
                     const amount = parseFloat(this.dataset.amount);
-                    addQuickPayment(amount);
+                    const paymentInput = document.getElementById('payment-amount');
+                    paymentInput.value = (parseFloat(paymentInput.value) || 0) + amount;
                 });
             });
-
-            // Other buttons
-            document.querySelector('.calculate-change-btn').addEventListener('click', calculateChange);
-            document.querySelector('.place-order-btn').addEventListener('click', placeOrder);
-            document.querySelector('.clear-payment-btn').addEventListener('click', clearPayment);
         });
 
         const currentUser = JSON.parse(localStorage.getItem('currentUser'));
