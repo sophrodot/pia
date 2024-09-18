@@ -421,6 +421,7 @@
         }
 
         function handleInteraction(event) {
+            event.preventDefault(); // Prevent default behavior
             const target = event.target;
             
             if (target.closest('.menu-item')) {
@@ -444,10 +445,9 @@
         }
 
         document.addEventListener('DOMContentLoaded', function() {
-            document.body.addEventListener('click', handleInteraction);
-            document.body.addEventListener('touchend', function(e) {
-                e.preventDefault();
-                handleInteraction(e);
+            // Use both click and touchstart events
+            ['click', 'touchstart'].forEach(function(eventType) {
+                document.body.addEventListener(eventType, handleInteraction, { passive: false });
             });
 
             const menuItems = document.querySelectorAll('.menu-item');
@@ -455,11 +455,11 @@
                 item.addEventListener('touchstart', function(e) {
                     e.preventDefault();
                     this.style.transform = 'scale(0.95)';
-                });
+                }, { passive: false });
                 item.addEventListener('touchend', function(e) {
                     e.preventDefault();
                     this.style.transform = 'scale(1)';
-                });
+                }, { passive: false });
             });
         });
 
