@@ -422,11 +422,12 @@
 
         function handleEvent(event) {
             event.preventDefault();
-            const target = event.currentTarget;
+            const target = event.target;
             
-            if (target.classList.contains('menu-item')) {
-                const item = target.dataset.item;
-                const price = parseFloat(target.dataset.price);
+            if (target.closest('.menu-item')) {
+                const menuItem = target.closest('.menu-item');
+                const item = menuItem.dataset.item;
+                const price = parseFloat(menuItem.dataset.price);
                 addToOrder(item, price);
             } else if (target.classList.contains('remove-item-btn')) {
                 const index = parseInt(target.dataset.index);
@@ -444,12 +445,10 @@
         }
 
         document.addEventListener('DOMContentLoaded', function() {
-            const interactiveElements = document.querySelectorAll('.menu-item, .remove-item-btn, .quick-payment-btn, .calculate-change-btn, .place-order-btn, .clear-payment-btn');
-            
-            interactiveElements.forEach(element => {
-                element.addEventListener('touchstart', handleEvent, {passive: false});
-                element.addEventListener('click', handleEvent);
-            });
+            document.body.addEventListener('click', handleEvent);
+            document.body.addEventListener('touchstart', function(e) {
+                handleEvent(e);
+            }, { passive: false });
         });
 
         const currentUser = JSON.parse(localStorage.getItem('currentUser'));
